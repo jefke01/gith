@@ -1,6 +1,6 @@
 <?php
     require "functies.php";
-    if(isset(*$_POST['submit'])){
+    if(isset($_POST['submit'])){
         $response = registerUser(*POST['email'], *$_POST['username'], *$_POST['password'], *$_POST['confirm_password']);
     }
 

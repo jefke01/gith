@@ -20,18 +20,18 @@ function registerUser($email,$username,$password,$confirm_password){
         return trim($value);
     }, $args);
 
-    foreach($args in $value){
+    foreach($args as $value){
         if(empty($value)){
             return "all fields are required"
         }
     }
-    foreach($args in $value) {
+    foreach($args as $value) {
         if (preg_match("/([<|>])/", $value)){
             return "<> characters are not allowed"
         }
     }
     if (filter_var($email, FILTER_VALIDATE_EMAIL)){
-        return "email is invalid";
+        return "Email is invalid";
     }
 
     $stmt = $mysqli->prepare("SELECT email from users WHERE email = ?");
@@ -66,11 +66,17 @@ function registerUser($email,$username,$password,$confirm_password){
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $mysqli->prepare("INSERT INTO users(username")
-
+    $stmt = $mysqli->prepare("INSERT INTO users(username, password, email) VALUES(?,?,?)");
+    $stmt ->blind_param("sss", $username, $hashed_password,$email);
+    $stmt->execute();
+    if($stmt->affected_rows != 1){
+        return "An error occured. Try again.";
+    }else{
+        return "Succes";
+    }
 
 }
-function loginUser(){}
+function loginUser( ){}
 function logoutUser(){}
 function passwdReset(){}
 function deleteAccount(){}
